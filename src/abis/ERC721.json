@@ -36,7 +36,7 @@
   "sourceMap": "427:1165:0:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "427:1165:0:-:0;;;;;",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.13;\n\n/*\nimport './ERC721Metadata.sol';\nimport './ERC721Connector.sol';\n*/\n\n/*\n\n    building out the minting function:\n        nft to point an adress\n        keep track of the token ids\n        keep track of token owner addresses to token ids\n        keed track of how many tokens an owner address has\n        create an event that emits a tranfer log - contact address \n\n*/\n\ncontract ERC721 {\n    event Transfer(\n        address indexed from,\n        address indexed to,\n        uint256 indexed tokenID\n    );\n\n    //mapping form token id to the owner\n    mapping(uint256 => address) private _tokenOwner;\n\n    //mapping from owner to nomber of owned tokens\n    mapping(address => uint256) private _OwnedTokensCount;\n\n    function _exists(uint256 tokenID) internal view returns (bool) {\n        //setting the address of nft owner to check the mapping of thr address\n        //from tokenOwner at the tokenID\n        address owner = _tokenOwner[tokenID];\n\n        //return trutiness the address is not zero\n        return owner != address(0);\n    }\n\n    function _mint(address to, uint256 tokenID) internal {\n        require(to != address(0), \"ERC721: minting to the zero address\");\n        require(!_exists(tokenID), \"ERC721: token aldready minted\");\n\n        //adding a new address with a token id for minting\n        _tokenOwner[tokenID] = to;\n\n        //keeping track of each address that is minting and adding one to the count\n        _OwnedTokensCount[to] += 1;\n\n        //for logs\n        emit Transfer(address(0), to, tokenID);\n    }\n}\n",
-  "sourcePath": "/home/bedo/Desktop/NFT/NFT/NFT-Donem/src/contracts/ERC721.sol",
+  "sourcePath": "/home/bedo/Desktop/NFT-Donem/src/contracts/ERC721.sol",
   "ast": {
     "absolutePath": "project:/src/contracts/ERC721.sol",
     "exportedSymbols": {
@@ -2329,7 +2329,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.6",
-  "updatedAt": "2022-04-03T22:27:06.629Z",
+  "updatedAt": "2022-04-04T11:31:50.292Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

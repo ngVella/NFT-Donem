@@ -21,5 +21,5 @@ contract Pogz is ERC721Connector {
         _pogzExists[_pogz] = true;
     }
 
-    constructor() ERC721Connector("Pogz", "POG") {}
+    constructor() ERC721Connector("Pogz", "POGZ") {}
 }
