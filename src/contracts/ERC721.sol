@@ -30,6 +30,17 @@ contract ERC721 {
     //mapping from owner to nomber of owned tokens
     mapping(address => uint256) private _OwnedTokensCount;
 
+    function balanceOf(address _owner) public view returns (uint256) {
+        require(_owner != address(0), "ERC721:Owner query fot non-existens token");
+        return _OwnedTokensCount[_owner];
+    }
+
+    function ownerOf(uint256 _tokenID) external view returns(address){
+        address owner = _tokenOwner[_tokenID];
+        require(owner != address(0), "ERC721:Owner query fot non-existens token");
+        return owner;
+    }
+
     function _exists(uint256 tokenID) internal view returns (bool) {
         //setting the address of nft owner to check the mapping of thr address
         //from tokenOwner at the tokenID
@@ -39,7 +50,7 @@ contract ERC721 {
         return owner != address(0);
     }
 
-    function _mint(address to, uint256 tokenID) internal {
+    function _mint(address to, uint256 tokenID) internal virtual{
         require(to != address(0), "ERC721: minting to the zero address");
         require(!_exists(tokenID), "ERC721: token aldready minted");
 
