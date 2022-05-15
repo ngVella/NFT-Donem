@@ -1,28 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-/*
-import './ERC721Metadata.sol';
-import './ERC721Connector.sol';
-*/
+import './ERC165.sol';
+import './interfaces/IERC721.sol';
 
-/*
 
-    building out the minting function:
-        nft to point an adress
-        keep track of the token ids
-        keep track of token owner addresses to token ids
-        keed track of how many tokens an owner address has
-        create an event that emits a tranfer log - contact address 
-
-*/
-
-contract ERC721 {
-    event Transfer(
-        address indexed from,
-        address indexed to,
-        uint256 indexed tokenID
-    );
+contract ERC721 is ERC165, IERC721{
 
     //mapping form token id to the owner
     mapping(uint256 => address) private _tokenOwner;
@@ -30,15 +13,15 @@ contract ERC721 {
     //mapping from owner to nomber of owned tokens
     mapping(address => uint256) private _OwnedTokensCount;
 
-    //MApping form tokenId to approved addresses
+    //mapping form tokenId to approved addresses
     mapping(uint256 => address) private _tokenApprovals;
 
-    function balanceOf(address _owner) public view returns (uint256) {
+    function balanceOf(address _owner) override public view returns (uint256) {
         require(_owner != address(0), "ERC721:Owner query fot non-existens token");
         return _OwnedTokensCount[_owner];
     }
 
-    function ownerOf(uint256 _tokenID) public view returns(address){
+    function ownerOf(uint256 _tokenID) override public view returns(address){
         address owner = _tokenOwner[_tokenID];
         require(owner != address(0), "ERC721:Owner query fot non-existens token");
         return owner;
@@ -90,7 +73,7 @@ contract ERC721 {
 
         emit Transfer(_from, _to, _tokenID);
     }
-    function transferFrom(address _from, address _to, uint256 _tokenID) public{
+    function transferFrom(address _from, address _to, uint256 _tokenID) override public{
         _transferFrom(_from, _to, _tokenID);
     }
 }
