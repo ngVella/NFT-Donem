@@ -1,0 +1,72 @@
+.token{
+    width: 300px;
+    box-shadow: 0 8px 16px rgb(5, 5, 5, 0.3);
+    padding: 2px 16px;
+    margin: 16px;
+    border-radius: 8px;
+}
+
+.card{
+    border: .3px rgba(#111111);
+    box-shadow: 5px 5px 8px;
+    border-radius: 4px;
+}
+
+.mdb-card-img{
+    box-shadow: 5px 5px 8px;
+    border-radius: 4px;
+    margin-top: 4%;
+}
+.container-filled{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    margin-top: 3%;
+}
+
+.pad{
+    padding-left: 5%;
+}
+
+.main-h1{
+    color: white;
+}
+  
+body {
+    margin:0;
+  }
+  
+  .bg {
+    animation:slide 3s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, rgb(59, 59, 59) 50%, rgb(59, 117, 77) 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+  }
+  
+  .bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:4s;
+  }
+  
+  .bg3 {
+    animation-duration:5s;
+  }
+  
+  
+  h1 {
+    font-family:monospace;
+  }
+  
+  @keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
+  }

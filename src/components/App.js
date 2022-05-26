@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 import Pogz from '../abis/Pogz.json';
-
+import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardImage, MDBBtn, MDBCardText } from 'mdb-react-ui-kit'
+import './App.css';
+import logo from '../logo.png';
 
 class App extends Component {
 
@@ -85,11 +87,16 @@ class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container-filled">
+
+                <div class="bg"></div>
+                <div class="bg bg2"></div>
+                <div class="bg bg3"></div>
+
                 {console.log(this.state.PogZ)}
                 <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
                     <div className="navbar-brand col-sm-3 col-md-3 mr-0">
-                        <h1>POGZ NFTs</h1>
+                        <img src={logo} style={{ maxWidth: '5rem' }} />
                     </div>
                     <ul className="navbar-nav px-3">
                         <li className="nav-item text-nowarp d-none d-sm-none d-sm-block">
@@ -104,12 +111,13 @@ class App extends Component {
                     <div className="row" style={{ margin: '25px' }}>
                         <main role="main" className="col-lg-12 d-flex text-center">
                             <div className="content mr-auto ml-auto">
-                                <h1>POGZ NFT MARKET PLACE</h1>
+                                <h1 className="main-h1">PogZ NFT MARKET PLACE</h1>
                                 <form onSubmit={(event) => {
                                     event.preventDefault()
                                     const PogzNFT = this.PogzNFT.value
                                     this.mint(PogzNFT)
                                 }}>
+
                                     <input type='text'
                                         placeholder='Add a file location'
                                         className="form-control mb-1"
@@ -117,14 +125,38 @@ class App extends Component {
 
                                     <input style={{ margin: '6px' }}
                                         type='submit'
-                                        className="btn btn-primary btn-black"
+                                        className="btn btn-dark btn-black"
                                         value="MINT" />
                                 </form>
                             </div>
                         </main>
                     </div>
-                </div>
 
+                    <hr></hr>
+                    <div className="row  textCenter pad">
+                        {this.state.PogZ.map((PogZ, key) => {
+                            return (
+                                <div>
+                                    <div>
+                                        <MDBCard className="token mdb-card" style={{ maxWidth: '22rem' }}>
+                                            <MDBCardImage src={PogZ} className="mdb-card-img" position='top' height={'250rem'} style={{ marginRight: '4px' }} />
+                                            <MDBCardBody>
+                                                <MDBCardTitle>
+                                                    PogZ
+                                                </MDBCardTitle>
+                                                <MDBCardText>
+                                                    Pogz NFTs bir dönem projesi için oluşturulmuş bir test projedir. Kim bilir belki bir gün gerçek olur...
+                                                </MDBCardText>
+                                                <MDBBtn href={PogZ} className="btn btn-dark btn-black">Download</MDBBtn>
+                                            </MDBCardBody>
+                                        </MDBCard>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+
+                </div>
             </div>
         )
     }
