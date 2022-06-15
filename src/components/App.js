@@ -5,7 +5,7 @@ import Pogz from '../abis/Pogz.json';
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardImage, MDBBtn, MDBCardText } from 'mdb-react-ui-kit'
 import './App.css';
 import logo from '../logo.png';
-
+import swal from 'sweetalert';
 var Eth = require('web3-eth');
 
 // or using the web3 umbrella package
@@ -114,14 +114,15 @@ class App extends Component {
 
     showLogs = (link) =>{
         //number, hash, parent hash, gas limit, gas used
-        alert("I am an alert box!");
         for (const index in this.state.PogZ){
             if (link == this.state.PogZ[index]){
-                console.log("Block Number : " + this.state.blockNumber[index])
-                console.log("Hash : " + this.state.hashList[index])
-                console.log("Parent Hash : " + this.state.parentHashList[index])
-                console.log("Gas Limit: " + this.state.gasLimitList[index])
-                console.log("Gas Used: " + this.state.gasUsedList[index])
+                swal("LOGS", `${"Block Number : " + this.state.blockNumber[index]}\n
+                            ${"Hash : " + this.state.hashList[index]}\n
+                            ${"Parent Hash : " + this.state.parentHashList[index]}\n
+                            ${"Gas Limit: " + this.state.gasLimitList[index]}\n
+                            ${"Gas Used: " + this.state.gasUsedList[index]}`,
+                            {buttons: false,});
+                            web3.eth.getBlock(this.state.blockNumber[index]).then(console.log)
             }
         }
     }
