@@ -40,10 +40,11 @@ contract ERC721 is ERC165, IERC721{
         return owner != address(0);
     }
 
+    
     function _mint(address to, uint256 tokenID) internal virtual{
         require(to != address(0), "ERC721: minting to the zero address");
         require(!_exists(tokenID), "ERC721: token aldready minted");
-
+        
         //adding a new address with a token id for minting
         _tokenOwner[tokenID] = to;
 

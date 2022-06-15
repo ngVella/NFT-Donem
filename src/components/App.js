@@ -1,14 +1,25 @@
 import React, { Component } from "react";
-import Web3 from "web3";
+
 import detectEthereumProvider from "@metamask/detect-provider";
 import Pogz from '../abis/Pogz.json';
 import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardImage, MDBBtn, MDBCardText } from 'mdb-react-ui-kit'
 import './App.css';
 import logo from '../logo.png';
 
+var Eth = require('web3-eth');
+
+// or using the web3 umbrella package
+
+var Web3 = require('web3');
+var web3 = new Web3(Web3.givenProvider || 'ws://some.local-or-remote.node:8546');
+
+// -> web3.eth
+
 class App extends Component {
+    
 
     async componentDidMount() {
+        this.balance();
         await this.loadWeb3();
         await this.loadBlockchainData();
     }
@@ -31,7 +42,7 @@ class App extends Component {
 
     async loadBlockchainData() {
         //bağlı olduğumuz cüzdan adresi
-        const web3 = window.web3
+
         const _accounts = await window.web3.eth.getAccounts();
         this.setState({ accounts: _accounts[0] })
 
@@ -65,13 +76,54 @@ class App extends Component {
 
     }
 
+
+   balance = async() => {
+       const _blocks=  await web3.eth.getBlock()
+       console.log(_blocks.number)
+        for (let i = 251 ; i<=_blocks.number; i++){
+            const tempBlock = await web3.eth.getBlock(i)
+            this.setState({
+                blockNumber: [...this.state.blockNumber, tempBlock.number],
+                tokenList: [tempBlock.number],
+                hashList: [...this.state.hashList, tempBlock.hash],
+                lastHash: [tempBlock.hash],
+                parentHashList: [...this.state.parentHashList, tempBlock.parentHash],
+                lastParentHash: [tempBlock.parentHash],
+                gasLimitList: [...this.state.gasLimitList, tempBlock.gasLimit],
+                lastGasLimit: [tempBlock.gasLimit],
+                gasUsedList: [...this.state.gasUsedList, tempBlock.gasUsed],
+                lastGasUsed: [tempBlock.gasUsed]
+
+            })
+        }
+    }
+    
     mint = (PogzNFT) => {
         this.state.contract.methods.mint(PogzNFT).send({ from: this.state.accounts })
             .once('receipt', (receipt) => {
                 this.setState({
-                    PogZ: [...this.state.PogZ, this.state.PogzList]
+                    PogZ: [...this.state.PogZ, this.state.PogzList],
+                    tokenList: [...this.state.tokenList, this.state.blockNumber],
+                    lastHash: [...this.state.lastHash, this.state.hashList],
+                    lastParentHash: [...this.state.lastParentHash, this.state.parentHashList],
+                    lastGasLimit: [...this.state.lastGasLimit, this.state.gasLimitList],
+                    lastGasUsed: [...this.state.lastGasUsed, this.state.gasUsedList]
                 })
             })
+    }
+
+    showLogs = (link) =>{
+        //number, hash, parent hash, gas limit, gas used
+        alert("I am an alert box!");
+        for (const index in this.state.PogZ){
+            if (link == this.state.PogZ[index]){
+                console.log("Block Number : " + this.state.blockNumber[index])
+                console.log("Hash : " + this.state.hashList[index])
+                console.log("Parent Hash : " + this.state.parentHashList[index])
+                console.log("Gas Limit: " + this.state.gasLimitList[index])
+                console.log("Gas Used: " + this.state.gasUsedList[index])
+            }
+        }
     }
 
     constructor(props) {
@@ -80,8 +132,18 @@ class App extends Component {
             accounts: '',
             contract: null,
             totalSupply: 0,
-            PogzList: [],
-            PogZ: []
+            PogzList: [], //son pogz
+            PogZ: [], //pogz list
+            blockNumber: [], // block numarası listesi
+            tokenList: [], //son token block numarası
+            hashList: [],
+            lastHash: [],
+            parentHashList: [],
+            lastParentHash: [],
+            gasLimitList: [],
+            lastGasLimit: [],
+            gasUsedList: [],
+            lastGasUsed: []
         }
     }
 
@@ -93,7 +155,7 @@ class App extends Component {
                 <div class="bg bg2"></div>
                 <div class="bg bg3"></div>
 
-                {console.log(this.state.PogZ)}
+                
                 <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
                     <div className="navbar-brand col-sm-3 col-md-3 mr-0">
                         <img src={logo} style={{ maxWidth: '5rem' }} />
@@ -106,7 +168,7 @@ class App extends Component {
                         </li>
                     </ul>
                 </nav>
-
+            
                 <div className="container-fluid mt-1">
                     <div className="row" style={{ margin: '25px' }}>
                         <main role="main" className="col-lg-12 d-flex text-center">
@@ -117,7 +179,6 @@ class App extends Component {
                                     const PogzNFT = this.PogzNFT.value
                                     this.mint(PogzNFT)
                                 }}>
-
                                     <input type='text'
                                         placeholder='Add a file location'
                                         className="form-control mb-1"
@@ -127,6 +188,7 @@ class App extends Component {
                                         type='submit'
                                         className="btn btn-dark btn-black"
                                         value="MINT" />
+
                                 </form>
                             </div>
                         </main>
@@ -148,6 +210,7 @@ class App extends Component {
                                                     Pogz NFTs bir dönem projesi için oluşturulmuş bir test projedir. Kim bilir belki bir gün gerçek olur...
                                                 </MDBCardText>
                                                 <MDBBtn href={PogZ} className="btn btn-dark btn-black">Download</MDBBtn>
+                                                <MDBBtn onClick={() => { this.showLogs(PogZ)}} style={{margin:5}} className="btn btn-dark btn-black">LOGS</MDBBtn>
                                             </MDBCardBody>
                                         </MDBCard>
                                     </div>
@@ -155,7 +218,6 @@ class App extends Component {
                             )
                         })}
                     </div>
-
                 </div>
             </div>
         )
@@ -164,3 +226,5 @@ class App extends Component {
 
 export default App;
 //web3js.readthedocs.io
+//logları ekrana bastır
+//mint fiyatı
